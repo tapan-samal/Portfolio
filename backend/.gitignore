@@ -1,0 +1,12 @@
+# Logs
+logs
+*.log
+
+
+config
+node_modules
+dist
+dist-ssr
+*.local
+
+
