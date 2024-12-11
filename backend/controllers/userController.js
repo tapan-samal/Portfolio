@@ -143,6 +143,8 @@ export const updateProfile = catchAsyncError(async (req, res, next) => {
     githubUrl: req.body.githubUrl,
     linkedinUrl: req.body.linkedinUrl,
     twitterUrl: req.body.twitterUrl,
+    facebookUrl: req.body.facebookUrl,
+    instagramUrl: req.body.instagramUrl,
   };
 
   if (req.files && req.files.avatar) {
@@ -159,6 +161,7 @@ export const updateProfile = catchAsyncError(async (req, res, next) => {
       url: updatedCloudinary.secure_url,
     };
   }
+
   if (req.files && req.files.resume) {
     const resume = req.files.resume;
     const user = await User.findById(req.user.id);
@@ -166,7 +169,7 @@ export const updateProfile = catchAsyncError(async (req, res, next) => {
     await cloudinary.uploader.destroy(resumeId);
     const updatedCloudinary = await cloudinary.uploader.upload(
       resume.tempFilePath,
-      { folder: "RESUME" }
+      { folder: "RESUME", resource_type: "raw" }
     );
     newUser.resume = {
       public_id: updatedCloudinary.public_id,

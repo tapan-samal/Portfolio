@@ -13,6 +13,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
+import LoadingButton from "./sub-component/LoadingButton";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -33,13 +34,15 @@ const Login = () => {
       toast.error(error || "Login failed!");
     }
     if (isAuthenticated) {
-      navigate("/dashboard");
+      navigate("/home");
       toast.success(message || "Login successful!");
+      setEmail("");
+      setPassword("");
     }
   }, [error, message, isAuthenticated, navigate]);
 
   return (
-    <div className="flex h-screen w-full items-center justify-center px-4">
+    <div className="flex h-screen w-full items-center justify-center px-4 bg-slate-700">
       <Card className="mx-auto max-w-sm">
         <CardHeader>
           <CardTitle className="text-2xl">Login</CardTitle>
@@ -71,14 +74,17 @@ const Login = () => {
                 onChange={(e) => setPassword(e.target.value)}
               />
             </div>
-            <Button
-              type="submit"
-              onClick={handleSubmitBtn}
-              disabled={loading}
-              className="w-full tracking-widest text-base"
-            >
-              {loading ? "Loading..." : "Login"}
-            </Button>
+            {!loading ? (
+              <Button
+                type="submit"
+                onClick={handleSubmitBtn}
+                className="w-full tracking-widest text-base"
+              >
+                Login
+              </Button>
+            ) : (
+              <LoadingButton content="Verifying..." />
+            )}
             <Link
               to="/password/forgot"
               className="ml-auto inline-block text-sm underline"
