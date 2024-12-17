@@ -2,6 +2,7 @@
 import axios from "axios";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { BASE_URL_USER } from "../../../utils/constant";
+import { toast } from "react-toastify";
 
 export const updatePassword = createAsyncThunk(
   "user/updatePassword",
@@ -27,12 +28,42 @@ export const updatePassword = createAsyncThunk(
 
 export const forgotPassword = createAsyncThunk(
   "user/forgotPassword",
-  async () => {}
+  async (email, { rejectWithValue }) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL_USER}/password/forgot`,
+        { email },
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      toast.success(response.data.message)
+      return null;
+    } catch (error) {
+      toast.error(error.response?.data?.message)
+      return rejectWithValue(error.response?.data?.message);
+    }
+  }
 );
 
 export const resetPassword = createAsyncThunk(
   "user/resetPassword",
-  async () => {}
+  async ({ token, password, confirmPassword }, { rejectWithValue }) => {
+    try {
+      const response = await axios.put(
+        `${BASE_URL_USER}/password/reset/${token}`,
+        { password, confirmPassword },
+        {
+          withCredentials: true,
+          headers: { "Content-Type": "application/json" },
+        }
+      );
+      return response.data.message;
+    } catch (error) {
+      return rejectWithValue(error.response?.data?.message);
+    }
+  }
 );
 
 const passwordSlice = createSlice({
@@ -45,12 +76,7 @@ const passwordSlice = createSlice({
     isUpdated: false,
     message: null,
   },
-  reducer: {
-    resetUpdatepassword(state) {
-      state.isUpdated = false;
-      state.error = null;
-    },
-  },
+  reducer: {},
   extraReducers: (builder) => {
     builder
       .addCase(updatePassword.pending, (state) => {
@@ -73,26 +99,32 @@ const passwordSlice = createSlice({
       .addCase(forgotPassword.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.message = null;
       })
       .addCase(forgotPassword.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
+        state.message = action.payload;
       })
       .addCase(forgotPassword.rejected, (state, action) => {
         state.loading = false;
-        state.error = true;
+        state.error = action.payload;
+        state.message = null;
       })
       .addCase(resetPassword.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.message = null;
       })
       .addCase(resetPassword.fulfilled, (state, action) => {
         state.loading = false;
         state.error = null;
+        state.message = action.payload;
       })
       .addCase(resetPassword.rejected, (state, action) => {
         state.loading = false;
-        state.error = true;
+        state.error = action.payload;
+        state.message = null;
       });
   },
 });

@@ -16,10 +16,10 @@ import { useEffect } from "react";
 import { getProfile } from "./store/slices/userSlice";
 
 function App() {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(getProfile());
-  }, []);
+  // const dispatch = useDispatch();
+  // useEffect(() => {
+  //   dispatch(getProfile());
+  // }, []);
   
   return (
     <BrowserRouter>

@@ -242,7 +242,7 @@ export const getUserForPortfolio = catchAsyncError(async (req, res, next) => {
 export const forgotPassword = catchAsyncError(async (req, res, next) => {
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
-    return next(new ErrorHandler("User not found", 404));
+    return next(new ErrorHandler("User not found!", 404));
   }
 
   const resetToken = user.getResetPasswordToken();
@@ -286,7 +286,7 @@ export const resetPassword = catchAsyncError(async (req, res, next) => {
 
   if (!user) {
     return next(
-      new ErrorHandler("Reset password token is invalid or has expired!", 400)
+      new ErrorHandler("Reset password token has expired!", 400)
     );
   }
 

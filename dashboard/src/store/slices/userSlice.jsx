@@ -20,7 +20,7 @@ export const userLogin = createAsyncThunk(
       if (!error.response) {
         return rejectWithValue("Network Error: Unable to reach the server!");
       }
-      return rejectWithValue(error.response?.data?.message);
+      return rejectWithValue(error.response?.data?.message || "Login failed!");
     }
   }
 );
@@ -34,7 +34,9 @@ export const userLogout = createAsyncThunk(
       });
       return { message: response.data.message };
     } catch (error) {
-      return rejectWithValue(error.response?.data?.message);
+      return rejectWithValue(
+        error.response?.data?.message || "Failed to log out. Try again!"
+      );
     }
   }
 );
@@ -48,7 +50,9 @@ export const getProfile = createAsyncThunk(
       });
       return response.data.user;
     } catch (error) {
-      return rejectWithValue(error.response.data.message);
+      const errorMessage =
+        error.response?.data?.message || "Failed to fetch profile data!";
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -69,7 +73,9 @@ export const updateProfile = createAsyncThunk(
       );
       return { user: response.data.user, message: response.data.message };
     } catch (error) {
-      return rejectWithValue(error.response.data.message);
+      const errorMessage =
+        error.response?.data?.message || "Failed to update profile.";
+      return rejectWithValue(errorMessage);
     }
   }
 );
@@ -89,13 +95,19 @@ const userSlice = createSlice({
       state.isUpdated = false;
       state.message = null;
     },
+    clearAllError(state) {
+      state.error = null;
+      state.message = null;
+    },
+    clearMessage(state) {
+      state.message = null;
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(userLogin.pending, (state) => {
         state.loading = true;
-        state.isAuthenticated = false;
-        state.user = {};
+        state.message = null;
         state.error = null;
       })
       .addCase(userLogin.fulfilled, (state, action) => {
@@ -108,8 +120,8 @@ const userSlice = createSlice({
       .addCase(userLogin.rejected, (state, action) => {
         state.loading = false;
         state.isAuthenticated = false;
-        state.user = null;
         state.error = action.payload;
+        state.user = {};
       })
       .addCase(userLogout.pending, (state) => {
         state.loading = true;
@@ -119,14 +131,11 @@ const userSlice = createSlice({
       .addCase(userLogout.fulfilled, (state, action) => {
         state.loading = false;
         state.isAuthenticated = false;
-        state.user = {};
         state.error = null;
         state.message = action.payload.message;
       })
       .addCase(userLogout.rejected, (state, action) => {
         state.loading = false;
-        state.isAuthenticated = false;
-        state.message = null;
         state.error = action.payload;
       })
       .addCase(getProfile.pending, (state) => {
@@ -139,12 +148,10 @@ const userSlice = createSlice({
         state.isAuthenticated = true;
         state.user = action.payload;
         state.error = null;
-        state.message = action.payload.message;
       })
       .addCase(getProfile.rejected, (state, action) => {
         state.loading = false;
         state.isAuthenticated = false;
-        state.message = null;
         state.error = action.payload;
       })
       .addCase(updateProfile.pending, (state) => {
@@ -169,5 +176,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { resetUpdateState } = userSlice.actions;
+export const { resetUpdateState, clearAllError, clearMessage } =
+  userSlice.actions;
 export default userSlice.reducer;

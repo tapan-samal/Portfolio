@@ -111,7 +111,7 @@ const UpdateProfile = () => {
             <input
               type="file"
               className="avatar-update-btn"
-              accept=".pdf,.doc,.docx"
+              accept=".pdf,.doc,.docx,.jpg,.jpeg,.png"
               onChange={(e) => handleFileChange(e, "resume")}
             />
           </div>

@@ -2,9 +2,8 @@ import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
-  SheetHeader,
   SheetTitle,
-  SheetTrigger,
+  SheetTrigger
 } from "@/components/ui/sheet";
 import {
   Tooltip,
@@ -12,7 +11,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { userLogout } from "@/store/slices/userSlice";
+import { clearMessage, getProfile, userLogout } from "@/store/slices/userSlice";
 import {
   FolderGit,
   History,
@@ -29,13 +28,13 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import Dashboard from "./sub-component/Dashboard";
+import Account from "./sub-component/Account";
+import AddApplicationTool from "./sub-component/AddApplicationTool";
 import AddProject from "./sub-component/AddProject";
 import AddSkill from "./sub-component/AddSkill";
-import AddApplicationTool from "./sub-component/AddApplicationTool";
 import AddTimeline from "./sub-component/AddTimeline";
+import Dashboard from "./sub-component/Dashboard";
 import Messages from "./sub-component/Messages";
-import Account from "./sub-component/Account";
 
 const HomePage = () => {
   const [active, setActive] = useState("Dashboard");
@@ -51,14 +50,19 @@ const HomePage = () => {
   };
 
   useEffect(() => {
+    dispatch(getProfile());
+  }, []);
+
+  useEffect(() => {
     if (error) {
-      toast.error(error || "Login failed!");
+      toast.error(error);
     }
     if (message && !isAuthenticated) {
       toast.success(message || "Logout successful!");
       navigate("/");
+      dispatch(clearMessage())
     }
-  }, [isAuthenticated, message, error, navigate]);
+  }, [message, error]);
 
   const renderActiveComponent = () => {
     switch (active) {

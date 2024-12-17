@@ -2,12 +2,18 @@ import { catchAsyncError } from "../middleWares/catchAsyncError.js";
 import ErrorHandler from "../middleWares/error.js";
 import { Timeline } from "../models/timelineSchema.js";
 
-export const postTimeline = catchAsyncError(async (req, res, next) => {
-  const { title, description, from, to } = req.body;
+export const addNewTimeline = catchAsyncError(async (req, res, next) => {
+  const { title, description, timeline } = req.body;
+
+  if (!timeline || !timeline.from || !timeline.to) {
+    return next(new ErrorHandler("Provide timeline data!", 400));
+  }
+
+  const { from, to } = timeline;
 
   const existingTimeline = await Timeline.findOne({ title });
   if (existingTimeline) {
-    return next(new ErrorHandler("Provided timeline alredy exist!", 400));
+    return next(new ErrorHandler("Provided timeline already exists!", 400));
   }
 
   const newTimeline = await Timeline.create({
@@ -22,6 +28,7 @@ export const postTimeline = catchAsyncError(async (req, res, next) => {
     timeline: newTimeline,
   });
 });
+
 
 export const deleteTimeline = catchAsyncError(async (req, res, next) => {
   const { id } = req.params;

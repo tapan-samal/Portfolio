@@ -1,9 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  updatePassword
-} from "@/store/slices/passwordSlice";
+import { updatePassword } from "@/store/slices/passwordSlice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -28,8 +26,9 @@ const UpdatePassword = () => {
 
   const handleUpdatePassword = () => {
     const { currentPassword, newPassword, confirmNewPassword } = passwordInfo;
-
-    dispatch(updatePassword({ currentPassword, newPassword, confirmNewPassword }));
+    dispatch(
+      updatePassword({ currentPassword, newPassword, confirmNewPassword })
+    );
   };
 
   useEffect(() => {
