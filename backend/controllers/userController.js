@@ -97,7 +97,7 @@ export const login = catchAsyncError(async (req, res, next) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return next(new ErrorHandler("Please provide email and password!", 400));
+    return next(new ErrorHandler("Provide email and password!", 400));
   }
 
   const user = await User.findOne({ email }).select("+password");
@@ -292,7 +292,7 @@ export const resetPassword = catchAsyncError(async (req, res, next) => {
 
   const { password, confirmPassword } = req.body;
   if (!password || !confirmPassword) {
-    return next(new ErrorHandler("Please fill all the password fields!", 400));
+    return next(new ErrorHandler("Fill all the password fields!", 400));
   }
   if (password !== confirmPassword) {
     return next(

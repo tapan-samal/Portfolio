@@ -5,7 +5,7 @@ import cloudinary from "cloudinary";
 
 export const addApplicationTool = catchAsyncError(async (req, res, next) => {
   const { name } = req.body;
-  const { icon } = req.files;
+  const icon = req?.files?.icon;
 
   if (!req.files || !icon) {
     return next(new ErrorHandler("Provide icon for application tool!", 400));

@@ -41,22 +41,6 @@ export const updateSkill = createAsyncThunk(
   }
 );
 
-export const deleteSkill = createAsyncThunk(
-  "skill/deleteSkill",
-  async (id, { rejectWithValue }) => {
-    try {
-      const response = await axios.delete(`${BASE_URL_SKILL}/delete/${id}`, {
-        withCredentials: true,
-      });
-      return response.data.message;
-    } catch (error) {
-      return rejectWithValue(
-        error.response?.data?.message || "An error occurred"
-      );
-    }
-  }
-);
-
 export const getAllSkills = createAsyncThunk(
   "skill/getAllSkills",
   async (_, { rejectWithValue }) => {
@@ -65,6 +49,22 @@ export const getAllSkills = createAsyncThunk(
         withCredentials: true,
       });
       return response.data.skills;
+    } catch (error) {
+      return rejectWithValue(
+        error.response?.data?.message || "An error occurred"
+      );
+    }
+  }
+);
+
+export const deleteSkill = createAsyncThunk(
+  "skill/deleteSkill",
+  async (id, { rejectWithValue }) => {
+    try {
+      const response = await axios.delete(`${BASE_URL_SKILL}/delete/${id}`, {
+        withCredentials: true,
+      });
+      return response.data.message;
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "An error occurred"

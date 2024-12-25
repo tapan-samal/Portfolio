@@ -26,7 +26,7 @@ export const getAllTimelines = createAsyncThunk(
       const response = await axios.get(`${BASE_URL_TIMELINE}/getall`, {
         withCredentials: true,
       });
-      return response.data.message;
+      return response.data.timeline;
     } catch (error) {
       return rejectWithValue(error.response.data.message);
     }
@@ -95,6 +95,9 @@ const timelineSlice = createSlice({
       })
       .addCase(deleteTimeline.fulfilled, (state, action) => {
         state.loading = false;
+        state.timelines = state.timelines.filter(
+          (element) => element._id !== action.meta.arg
+        );
         state.message = action.payload;
         state.error = null;
       })

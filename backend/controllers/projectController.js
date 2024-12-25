@@ -4,39 +4,37 @@ import ErrorHandler from "../middleWares/error.js";
 import { Project } from "../models/projectSchema.js";
 import cloudinary from "cloudinary";
 
-
 export const addNewProject = catchAsyncError(async (req, res, next) => {
-  const { banner } = req.files || {};
   const {
     title,
-    description,
-    githubLink,
-    projectLink,
     technologies,
     stack,
     deployed,
+    githubLink,
+    projectLink,
+    description,
   } = req.body;
-
-  if (!banner) {
-    return next(new ErrorHandler("Provide project banner!", 400));
-  }
-  if (
-    !title ||
-    !description ||
-    !githubLink ||
-    !projectLink ||
-    !technologies ||
-    !stack ||
-    !typeof deployed === "undefined"
-  ) {
-    return next(
-      new ErrorHandler("Provide all details about the project!", 400)
-    );
-  }
 
   const existingProject = await Project.findOne({ title });
   if (existingProject) {
     return next(new ErrorHandler("Provided project already exists!", 400));
+  }
+  
+  if (
+    !title ||
+    !technologies ||
+    !stack ||
+    !deployed ||
+    !githubLink ||
+    !projectLink ||
+    !description
+  ) {
+    return next(new ErrorHandler("Provide all details about project!", 400));
+  }
+
+  const { banner } = req.files || {};
+  if (!banner) {
+    return next(new ErrorHandler("Provide project banner!", 400));
   }
 
   const cloudinaryResponse = await cloudinary.uploader.upload(

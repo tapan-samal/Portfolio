@@ -85,7 +85,7 @@ const Login = () => {
                 Login
               </Button>
             ) : (
-              <LoadingButton content="Verifying..." />
+              <LoadingButton content="Verifying" />
             )}
             <div className="flex items-center justify-center">
               <Link

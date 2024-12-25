@@ -1,25 +1,18 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import "./App.css";
-import HomePage from "./pages/HomePage";
-import Login from "./pages/Login";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
-import ManageSkills from "./pages/ManageSkills";
-import ManageProjects from "./pages/ManageProjects";
-import ManageTimeline from "./pages/ManageTimeline";
-import ViewProject from "./pages/ViewProject";
-import UpdateProject from "./pages/UpdateProject";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useDispatch } from "react-redux";
-import { useEffect } from "react";
-import { getProfile } from "./store/slices/userSlice";
+import "./App.css";
+import ForgotPassword from "./pages/ForgotPassword";
+import HomePage from "./pages/HomePage";
+import Login from "./pages/Login";
+import ManageProjects from "./pages/ManageProjects";
+import ManageSkills from "./pages/ManageSkills";
+import ManageTimeline from "./pages/ManageTimeline";
+import ResetPassword from "./pages/ResetPassword";
+import UpdateProject from "./pages/UpdateProject";
+import ViewProject from "./pages/ViewProject";
 
 function App() {
-  // const dispatch = useDispatch();
-  // useEffect(() => {
-  //   dispatch(getProfile());
-  // }, []);
   
   return (
     <BrowserRouter>

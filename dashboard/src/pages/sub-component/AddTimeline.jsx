@@ -55,7 +55,7 @@ const AddTimeline = () => {
         onSubmit={handleAddNewTimeline}
       >
         <div className="space-y-6">
-          <h2 className="text-2xl font-bold">Add New Timeline</h2>
+          <h2 className="text-2xl font-bold">Add Timeline</h2>
           <div className="flex flex-col gap-4">
             {/* Title */}
             <div className="w-full sm:col-span-4">

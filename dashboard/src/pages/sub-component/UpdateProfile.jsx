@@ -51,13 +51,13 @@ const UpdateProfile = () => {
   };
 
   const handleUpdateProfile = () => {
-    const data = new FormData();
+    const updatedData = new FormData();
     Object.keys(formData).forEach((key) => {
       if (key !== "avatarPreview" && key !== "resumePreview") {
-        data.append(key, formData[key]);
+        updatedData.append(key, formData[key]);
       }
     });
-    dispatch(updateProfile(data));
+    dispatch(updateProfile(updatedData));
   };
 
   useEffect(() => {
