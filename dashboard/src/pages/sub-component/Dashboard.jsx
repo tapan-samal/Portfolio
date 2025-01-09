@@ -289,7 +289,8 @@ const Dashboard = () => {
                       </TableHeader>
                       <TableBody>
                         {timelines && timelines.length > 0 ? (
-                          timelines.map((element) => {
+                          timelines.slice().sort((a, b) => new Date(b.timeline.from) - new Date(a.timeline.from))
+                          .map((element) => {
                             return (
                               <TableRow className="bg-accent" key={element._id}>
                                 <TableCell className="font-medium">

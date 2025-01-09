@@ -1,12 +1,16 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import React, { useEffect, useState } from "react";
-import LoadingButton from "./LoadingButton";
-import { useDispatch, useSelector } from "react-redux";
-import { addNewSkill, clearAllSkillError } from "@/store/slices/skillSlice";
-import { toast } from "react-toastify";
+import {
+  addNewSkill,
+  clearSkillError,
+  clearSkillMessage
+} from "@/store/slices/skillSlice";
 import { FileImage } from "lucide-react";
+import { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { toast } from "react-toastify";
+import LoadingButton from "./LoadingButton";
 
 const AddSkill = () => {
   const [title, setTitle] = useState("");
@@ -59,7 +63,7 @@ const AddSkill = () => {
   useEffect(() => {
     if (error) {
       toast.error(error);
-      dispatch(clearAllSkillError());
+      dispatch(clearSkillError());
     }
     if (message) {
       toast.success(message);
@@ -67,6 +71,7 @@ const AddSkill = () => {
       setProficiency("");
       setIcon(null);
       setIconPreview("");
+      dispatch(clearSkillMessage());
     }
   }, [loading, message, error]);
 
@@ -93,7 +98,7 @@ const AddSkill = () => {
 
             <div className="w-full">
               <Label className="block text-sm font-medium leading-6 text-gray-900">
-                Proficiency
+                Proficiency( % )
               </Label>
               <Input
                 type="number"
@@ -149,7 +154,7 @@ const AddSkill = () => {
 
         <div className="mt-10 flex items-center justify-end gap-x-6">
           {loading ? (
-            <LoadingButton content="Submitting..." />
+            <LoadingButton content="Submitting" />
           ) : (
             <Button type="submit" className="w-full">
               Add Skill

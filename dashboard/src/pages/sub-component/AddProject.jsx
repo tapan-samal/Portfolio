@@ -216,7 +216,7 @@ const AddProject = () => {
 
           <div className="mt-10 flex items-center justify-end gap-x-6">
             {loading ? (
-              <LoadingButton content="Submitting..." />
+              <LoadingButton content="Submitting" />
             ) : (
               <Button type="submit" className="w-full">
                 Add Project

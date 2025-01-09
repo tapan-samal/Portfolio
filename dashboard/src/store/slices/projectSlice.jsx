@@ -6,7 +6,6 @@ import { BASE_URL_PROJECT } from "../../../utils/constant";
 export const addNewProject = createAsyncThunk(
   "project/addNewProject",
   async (data, { rejectWithValue }) => {
-    
     try {
       const response = await axios.post(`${BASE_URL_PROJECT}/add`, data, {
         withCredentials: true,
@@ -49,7 +48,7 @@ export const updateProject = createAsyncThunk(
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-      return response.data.message;
+      return response.data;
     } catch (error) {
       return rejectWithValue(
         error.response?.data?.message || "An error occurred!"
@@ -58,7 +57,7 @@ export const updateProject = createAsyncThunk(
   }
 );
 
-export const getSingleProject = createAsyncThunk(
+export const getProjectById = createAsyncThunk(
   "project/getSingleProject",
   async (id, { rejectWithValue }) => {
     try {
@@ -94,7 +93,7 @@ const projectSlice = createSlice({
   name: "project",
   initialState: {
     projects: [],
-    Project: {},
+    project: null,
     loading: false,
     error: null,
     message: null,
@@ -124,6 +123,9 @@ const projectSlice = createSlice({
       })
       .addCase(deleteProject.fulfilled, (state, action) => {
         state.loading = false;
+        state.projects = state.projects.filter(
+          (element) => element._id !== action.meta.arg
+        );
         state.message = action.payload;
         state.error = null;
       })
@@ -139,7 +141,8 @@ const projectSlice = createSlice({
       })
       .addCase(updateProject.fulfilled, (state, action) => {
         state.loading = false;
-        state.message = action.payload;
+        state.project = action.payload.project;
+        state.message = action.payload.message;
         state.error = null;
       })
       .addCase(updateProject.rejected, (state, action) => {
@@ -147,17 +150,17 @@ const projectSlice = createSlice({
         state.message = null;
         state.error = action.payload;
       })
-      .addCase(getSingleProject.pending, (state) => {
+      .addCase(getProjectById.pending, (state) => {
         state.loading = true;
         state.message = null;
         state.error = null;
       })
-      .addCase(getSingleProject.fulfilled, (state, action) => {
+      .addCase(getProjectById.fulfilled, (state, action) => {
         state.loading = false;
-        state.Project = action.payload;
+        state.project = action.payload;
         state.error = null;
       })
-      .addCase(getSingleProject.rejected, (state, action) => {
+      .addCase(getProjectById.rejected, (state, action) => {
         state.loading = false;
         state.message = null;
         state.error = action.payload;

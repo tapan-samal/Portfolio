@@ -3,7 +3,7 @@ import {
   Sheet,
   SheetContent,
   SheetTitle,
-  SheetTrigger
+  SheetTrigger,
 } from "@/components/ui/sheet";
 import {
   Tooltip,
@@ -11,7 +11,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { clearMessage, getProfile, userLogout } from "@/store/slices/userSlice";
+import {
+  clearUserError,
+  clearUserMessage,
+  getProfile,
+  userLogout
+} from "@/store/slices/userSlice";
 import {
   FolderGit,
   History,
@@ -56,11 +61,12 @@ const HomePage = () => {
   useEffect(() => {
     if (error) {
       toast.error(error);
+      dispatch(clearUserError());
     }
     if (message && !isAuthenticated) {
       toast.success(message || "Logout successful!");
       navigate("/");
-      dispatch(clearMessage())
+      dispatch(clearUserMessage());
     }
   }, [message, error]);
 

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { resetUpdateState, updateProfile } from "@/store/slices/userSlice";
+import { resetUserState, updateProfile } from "@/store/slices/userSlice";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -37,7 +37,7 @@ const UpdateProfile = () => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleFileChange = (e, fileType) => {
+  const handleFileUpload = (e, fileType) => {
     const file = e.target.files[0];
     const reader = new FileReader();
     reader.onload = () => {
@@ -65,7 +65,7 @@ const UpdateProfile = () => {
       toast.error(error || "An error occurred while updating the profile.");
     }
     if (isUpdated) {
-      dispatch(resetUpdateState());
+      dispatch(resetUserState());
       toast.success(message || "Profile updated successfully!");
     }
   }, [isUpdated, message]);
@@ -87,7 +87,7 @@ const UpdateProfile = () => {
               type="file"
               className="avatar-update-btn"
               accept="image/*"
-              onChange={(e) => handleFileChange(e, "avatar")}
+              onChange={(e) => handleFileUpload(e, "avatar")}
             />
           </div>
           {/* Resume Upload */}

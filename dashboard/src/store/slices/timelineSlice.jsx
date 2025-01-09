@@ -55,7 +55,15 @@ const timelineSlice = createSlice({
     error: null,
     message: null,
   },
-  reducers: {},
+  reducers: {
+    clearTimelineError(state) {
+      state.error = null;
+    },
+    clearTimelineMessage(state) {
+      state.message = null;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(addNewTimeline.pending, (state) => {
@@ -109,4 +117,6 @@ const timelineSlice = createSlice({
   },
 });
 
+export const { clearTimelineError, clearTimelineMessage } =
+  timelineSlice.actions;
 export default timelineSlice.reducer;

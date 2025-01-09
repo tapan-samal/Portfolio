@@ -91,16 +91,16 @@ const userSlice = createSlice({
     isUpdated: false,
   },
   reducers: {
-    resetUpdateState(state) {
+    resetUserState(state) {
       state.isUpdated = false;
       state.message = null;
     },
-    clearAllError(state) {
+    clearUserError(state) {
       state.error = null;
-      state.message = null;
     },
-    clearMessage(state) {
+    clearUserMessage(state) {
       state.message = null;
+      state.error = null;
     },
   },
   extraReducers: (builder) => {
@@ -175,6 +175,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { resetUpdateState, clearAllError, clearMessage } =
+export const { resetUserState, clearUserError, clearUserMessage } =
   userSlice.actions;
 export default userSlice.reducer;

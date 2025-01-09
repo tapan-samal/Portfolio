@@ -6,7 +6,11 @@ import React, { useEffect, useState } from "react";
 import LoadingButton from "./LoadingButton";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
-import { addNewTimeline } from "@/store/slices/timelineSlice";
+import {
+  addNewTimeline,
+  clearTimelineError,
+  clearTimelineMessage,
+} from "@/store/slices/timelineSlice";
 
 const AddTimeline = () => {
   const initialTimeline = {
@@ -41,10 +45,12 @@ const AddTimeline = () => {
   useEffect(() => {
     if (error) {
       toast.error(error);
+      dispatch(clearTimelineError());
     }
     if (message) {
       toast.success(message);
       setTimelineInfo(initialTimeline);
+      dispatch(clearTimelineMessage());
     }
   }, [dispatch, error, message]);
 
@@ -75,10 +81,11 @@ const AddTimeline = () => {
             {/* Description */}
             <div className="w-full sm:col-span-4">
               <Label className="block text-sm font-medium leading-6 text-gray-900">
-                Description
+                Academy/University
               </Label>
-              <Textarea
-                placeholder="Description"
+              <Input
+                type="text"
+                placeholder="Educational Institute name"
                 name="description"
                 value={timelineInfo.description}
                 onChange={handleInputChange}

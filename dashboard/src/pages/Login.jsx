@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { userLogin } from "@/store/slices/userSlice";
+import { clearUserError, clearUserMessage, userLogin } from "@/store/slices/userSlice";
 import { ChevronsLeft } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -31,12 +31,14 @@ const Login = () => {
   useEffect(() => {
     if (error) {
       toast.error(error);
+      dispatch(clearUserError());
     }
     if (message) {
       navigate("/home");
       toast.success(message || "Login successful!");
       setEmail("");
       setPassword("");
+      dispatch(clearUserMessage())
     }
   }, [error, message]);
 

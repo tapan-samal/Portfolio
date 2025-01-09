@@ -86,8 +86,11 @@ const skillSlice = createSlice({
     message: null,
   },
   reducers: {
-    clearAllError(state) {
+    clearSkillError(state) {
       state.error = null;
+      state.message = null;
+    },
+    clearSkillMessage(state) {
       state.message = null;
     },
   },
@@ -111,6 +114,7 @@ const skillSlice = createSlice({
       .addCase(updateSkill.pending, (state) => {
         state.loading = true;
         state.error = null;
+        state.message = null;
       })
       .addCase(updateSkill.fulfilled, (state, action) => {
         state.loading = false;
@@ -119,16 +123,21 @@ const skillSlice = createSlice({
       })
       .addCase(updateSkill.rejected, (state, action) => {
         state.loading = false;
+        state.message = null;
         state.error = action.payload;
       })
       .addCase(deleteSkill.pending, (state) => {
         state.loading = true;
+        state.message = null;
         state.error = null;
       })
       .addCase(deleteSkill.fulfilled, (state, action) => {
         state.loading = false;
-        state.error = null;
+        state.skills = state.skills.filter(
+          (skill) => skill._id !== action.meta.arg
+        );
         state.message = action.payload;
+        state.error = null;
       })
       .addCase(deleteSkill.rejected, (state, action) => {
         state.loading = false;
@@ -150,4 +159,5 @@ const skillSlice = createSlice({
   },
 });
 
+export const { clearSkillMessage, clearSkillError } = skillSlice.actions;
 export default skillSlice.reducer;
