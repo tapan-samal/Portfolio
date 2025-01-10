@@ -21,7 +21,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import LoadingButton from "./LoadingButton";
 import { useEffect, useState } from "react";
-import { getAllProjects } from "@/store/slices/projectSlice";
+import { clearProjectMessage, getAllProjects } from "@/store/slices/projectSlice";
 import { getAllSkills } from "@/store/slices/skillSlice";
 import {
   clearMessage,
@@ -61,7 +61,10 @@ const Dashboard = () => {
   }, [dispatch]);
 
   useEffect(() => {
-    if (appError) toast.error(appError);
+    if (appError) {
+      toast.error(appError);
+      dispatch(clearProjectMessage());
+    }
     if (appMessage) {
       toast.success(appMessage);
       setAppId(null);
@@ -82,7 +85,9 @@ const Dashboard = () => {
                   </CardDescription>
                 </CardHeader>
                 <CardFooter>
-                  <Button>Visit Portfolio</Button>
+                  <Link to={user?.portfolioUrl} target="_blank">
+                    <Button>Visit Portfolio</Button>
+                  </Link>
                 </CardFooter>
               </Card>
               <Card className="flex flex-col justify-center">
@@ -289,22 +294,31 @@ const Dashboard = () => {
                       </TableHeader>
                       <TableBody>
                         {timelines && timelines.length > 0 ? (
-                          timelines.slice().sort((a, b) => new Date(b.timeline.from) - new Date(a.timeline.from))
-                          .map((element) => {
-                            return (
-                              <TableRow className="bg-accent" key={element._id}>
-                                <TableCell className="font-medium">
-                                  {element.title}
-                                </TableCell>
-                                <TableCell className="md:table-cell">
-                                  {element.timeline.from}
-                                </TableCell>
-                                <TableCell className="md:table-cell  text-center">
-                                  {element.timeline.to}
-                                </TableCell>
-                              </TableRow>
-                            );
-                          })
+                          timelines
+                            .slice()
+                            .sort(
+                              (a, b) =>
+                                new Date(b.timeline.from) -
+                                new Date(a.timeline.from)
+                            )
+                            .map((element) => {
+                              return (
+                                <TableRow
+                                  className="bg-accent"
+                                  key={element._id}
+                                >
+                                  <TableCell className="font-medium">
+                                    {element.title}
+                                  </TableCell>
+                                  <TableCell className="md:table-cell">
+                                    {element.timeline.from}
+                                  </TableCell>
+                                  <TableCell className="md:table-cell  text-center">
+                                    {element.timeline.to}
+                                  </TableCell>
+                                </TableRow>
+                              );
+                            })
                         ) : (
                           <TableRow>
                             <TableCell className="text-2xl overflow-y-hidden">

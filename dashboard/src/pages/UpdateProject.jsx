@@ -5,7 +5,12 @@ import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { updateProject, getProjectById } from "@/store/slices/projectSlice";
+import {
+  updateProject,
+  getProjectById,
+  clearProjectMessage,
+  clearProjectError,
+} from "@/store/slices/projectSlice";
 import LoadingButton from "./sub-component/LoadingButton";
 import { Link, useParams } from "react-router-dom";
 
@@ -97,8 +102,14 @@ const UpdateProject = () => {
   };
 
   useEffect(() => {
-    if (error) toast.error(error);
-    if (message) toast.success(message);
+    if (error) {
+      toast.error(error);
+      dispatch(clearProjectError());
+    }
+    if (message) {
+      toast.success(message);
+      dispatch(clearProjectMessage());
+    }
   }, [error, message]);
 
   const stacks = ["MERN", "MEAN", "MEVN", "Django", "LAMP", "LEMP"];
@@ -223,7 +234,7 @@ const UpdateProject = () => {
           </div>
           <div className="mt-10 flex items-center justify-end gap-x-6">
             {loading ? (
-              <LoadingButton content="Submitting" />
+              <LoadingButton content="Updating" />
             ) : (
               <Button type="submit" className="w-full">
                 Update Project

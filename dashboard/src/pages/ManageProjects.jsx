@@ -15,7 +15,12 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import { deleteProject, getAllProjects } from "@/store/slices/projectSlice";
+import {
+  clearProjectError,
+  clearProjectMessage,
+  deleteProject,
+  getAllProjects,
+} from "@/store/slices/projectSlice";
 import { Eye, Pen, Trash2 } from "lucide-react";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -33,16 +38,18 @@ const ManageProjects = () => {
   useEffect(() => {
     if (error) {
       toast.error(error);
+      dispatch(clearProjectError());
     }
 
     if (message) {
       toast.success(message);
+      dispatch(clearProjectMessage());
     }
   }, [message, error]);
 
   useEffect(() => {
     dispatch(getAllProjects());
-  }, [dispatch]);
+  }, []);
 
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">

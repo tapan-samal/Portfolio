@@ -93,12 +93,20 @@ const projectSlice = createSlice({
   name: "project",
   initialState: {
     projects: [],
-    project: null,
+    project: [],
     loading: false,
     error: null,
     message: null,
   },
-  reducers: {},
+  reducers: {
+    clearProjectError(state) {
+      state.error = null;
+    },
+    clearProjectMessage(state) {
+      state.message = null;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(addNewProject.pending, (state) => {
@@ -183,4 +191,5 @@ const projectSlice = createSlice({
   },
 });
 
+export const { clearProjectMessage, clearProjectError } = projectSlice.actions;
 export default projectSlice.reducer;
