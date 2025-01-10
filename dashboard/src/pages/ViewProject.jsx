@@ -1,16 +1,32 @@
 import { Button } from "@/components/ui/button";
-import { getProjectById } from "@/store/slices/projectSlice";
+import {
+  clearProjectError,
+  clearProjectMessage,
+  getProjectById,
+} from "@/store/slices/projectSlice";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useParams } from "react-router-dom";
+import { toast } from "react-toastify";
 
 const ViewProject = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const { project } = useSelector((state) => state.project);
+  const { project, message, error } = useSelector((state) => state.project);
 
   const technologiesList = project.technologies?.split(", ") || [];
   const descriptionList = project.description?.split(", ") || [];
+
+  useEffect(() => {
+    if (error) {
+      toast.error(error);
+      dispatch(clearProjectError());
+    }
+    if (message) {
+      toast.success(message);
+      dispatch(clearProjectMessage());
+    }
+  }, [message, error]);
 
   useEffect(() => {
     dispatch(getProjectById(id));
@@ -39,29 +55,25 @@ const ViewProject = () => {
                 <p className="text-xl font-semibold mb-2">Technologies</p>
                 <ul className="list-inside flex flex-wrap gap-4">
                   {technologiesList.map((item, index) => (
-                    <>
-                      <li
-                        key={index}
-                        className="w-full sm:w-auto before:content-['▪'] before:mr-2 before:text-black"
-                      >
-                        {item}
-                      </li>
-                    </>
+                    <li
+                      key={index}
+                      className="w-full sm:w-auto before:content-['▪'] before:mr-2 before:text-black"
+                    >
+                      {item}
+                    </li>
                   ))}
                 </ul>
               </div>
               <div className="w-full sm:col-span-4">
                 <p className="text-xl font-semibold mb-2">Description</p>
-                <ul className="list-inside flex flex-wrap gap-4">
+                <ul className="list-inside flex flex-col flex-wrap">
                   {descriptionList.map((item, index) => (
-                    <>
-                      <li
-                        key={index}
-                        className="w-full sm:w-auto before:content-['▪'] before:mr-2 before:text-black"
-                      >
-                        {item}
-                      </li>
-                    </>
+                    <li
+                      key={index}
+                      className="w-full sm:w-auto before:content-['▪'] before:mr-2 before:text-black"
+                    >
+                      {item}
+                    </li>
                   ))}
                 </ul>
               </div>
@@ -74,9 +86,7 @@ const ViewProject = () => {
                 <p>{project.deployed}</p>
               </div>
               <div className="w-full sm:col-span-4">
-                <p className="text-xl font-semibold mb-2">
-                  Github Link
-                </p>
+                <p className="text-xl font-semibold mb-2">Github Link</p>
                 <Link
                   className="text-sky-700"
                   target="_blank"

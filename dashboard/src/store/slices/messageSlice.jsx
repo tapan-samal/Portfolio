@@ -53,7 +53,12 @@ const messageSlice = createSlice({
     error: null,
     message: null,
   },
-  reducers: {},
+  reducers: {
+    clearAllMessage(state) {
+      state.message = null;
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(sendMessage.pending, (state) => {
@@ -104,4 +109,5 @@ const messageSlice = createSlice({
   },
 });
 
+export const {clearAllMessage} = messageSlice.actions;
 export default messageSlice.reducer;

@@ -94,7 +94,7 @@ export const updateProject = catchAsyncError(async (req, res, next) => {
     !projectLink ||
     !technologies ||
     !stack ||
-    !typeof deployed === "undefined"
+    !deployed 
   ) {
     return next(
       new ErrorHandler("Provide all required details about the project!", 400)
@@ -108,7 +108,7 @@ export const updateProject = catchAsyncError(async (req, res, next) => {
     projectLink,
     technologies,
     stack,
-    deployed: JSON.parse(deployed),
+    deployed,
   };
 
   if (req.files && req.files.banner) {
@@ -171,7 +171,7 @@ export const getProject = catchAsyncError(async (req, res, next) => {
 
   const project = await Project.findById(id);
   if (!project) {
-    return next(new ErrorHandler("No projects found!", 404));
+    return next(new ErrorHandler("Project not found!", 404));
   }
   res.status(200).json({
     success: true,
@@ -183,7 +183,7 @@ export const getAllProject = catchAsyncError(async (req, res, next) => {
   const projects = await Project.find();
 
   if (!projects || projects.length === 0) {
-    return next(new ErrorHandler("No projects found!", 404));
+    return next(new ErrorHandler("Projects not found!", 404));
   }
 
   res.status(200).json({

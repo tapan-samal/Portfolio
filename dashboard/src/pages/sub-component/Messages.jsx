@@ -7,7 +7,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { deleteMessage, getAllMessages } from "@/store/slices/messageSlice";
+import { clearAllMessage, deleteMessage, getAllMessages } from "@/store/slices/messageSlice";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { toast } from "react-toastify";
@@ -33,6 +33,7 @@ const Messages = () => {
     }
     if (message) {
       toast.success(message);
+      dispatch(clearAllMessage());
     }
   }, [error, message]);
 
